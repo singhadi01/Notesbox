@@ -9,6 +9,8 @@ from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 import google.generativeai as genai
 from django.conf import settings
+import random
+import string
 
 @login_required(login_url="/login/")
 def home(request):
@@ -130,18 +132,22 @@ def copy_subject_by_code(request):
         try:
             # Look up the subject by the provided code
             subject = Subject.objects.get(code=code)
-            if Subject.objects.filter(name=f"{subject.name} by {subject.user.username}", user=request.user).exists():
+            if Subject.objects.filter(name=f"{subject.name} by {subject.user.username} for {request.user.username}", user=request.user).exists():
                     messages.error(request, "A subject with this name already exists!")
                     return redirect('/')
             # Check if the user is not the owner of the subject
             if subject.user != request.user:
                 print(f"User is not the owner, proceeding with copying the subject.")
-                # Create a copy of the subject for the current user
+                while True:
+                    unique_string = ''.join(random.choices(string.digits, k=4))
+                    if not Subject.objects.filter(code__icontains=unique_string).exists():
+                        break
                 copied_subject = Subject(
-                    name=f"{subject.name} by {subject.user.username} in {request.user.username}",
-                    user=request.user
+                    name=f"{subject.name} by {subject.user.username} for {request.user.username}",
+                    user=request.user,
+                    code=f"{subject.code}({unique_string})"
                 )
-                copied_subject.save()  # Ensure the copied subject is saved
+                copied_subject.save()  
                 print(f"Copied subject saved with ID: {copied_subject.id}")
                 
                 for video in Video.objects.filter(subject=subject):
@@ -153,7 +159,7 @@ def copy_subject_by_code(request):
                         link=video.link,
                         embed_link=video.embed_link
                     )
-                    new_video.save()  # Ensure the new video is saved
+                    new_video.save()  
                     print(f"Video saved: {new_video.title}")
                 messages.success(request, "Subject and videos copied successfully!")
                 return redirect('/') 
@@ -180,21 +186,18 @@ def get_gemini_response(input_text):
     )
 
     chat_session = model.start_chat(
-        history=[]  # Optionally, you can add past messages here
+        history=[] 
     )
 
     response = chat_session.send_message(input_text)
     return response.text
 
-# Example view that uses Gemini API
 def chat_view(request):
     if request.method == "POST" and request.headers.get('X-Requested-With') == 'XMLHttpRequest':
         try:
             user_input = request.POST.get("input_text")
             if not user_input:
                 return JsonResponse({'message': 'No input provided'}, status=400)
-
-            # Log the user input for debugging
             print(f"User input: {user_input}")
 
             response_text = get_gemini_response(user_input)
@@ -203,7 +206,6 @@ def chat_view(request):
             return JsonResponse({'message': response_text})
 
         except Exception as e:
-            # Log the error for debugging
             print(f"Error processing the request: {e}")
             return JsonResponse({'message': 'An error occurred'}, status=500)
 

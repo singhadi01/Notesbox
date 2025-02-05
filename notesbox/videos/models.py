@@ -5,8 +5,8 @@ import random
 import string
 
 class Subject(models.Model):
-    name = models.CharField(max_length=100, unique=True)  # Ensure each subject is unique
-    code = models.CharField(max_length=6,blank=True,unique=True)
+    name = models.CharField(max_length=100, unique=True)  
+    code = models.CharField(max_length=12,blank=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE,default=1)
     def generate_unique_code(self):
         code = ''.join(random.choices(string.digits, k=6))
@@ -16,7 +16,7 @@ class Subject(models.Model):
     def save(self, *args, **kwargs):
         if not self.code:
             self.code = self.generate_unique_code()
-            super(Subject, self).save(*args, **kwargs)
+        super(Subject, self).save(*args, **kwargs)
     def __str__(self):
         return self.name
 
