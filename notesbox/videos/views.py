@@ -12,6 +12,10 @@ from django.conf import settings
 import random
 import string
 
+def instructions(request):
+     return render(request, "instructions.html")
+ 
+
 @login_required(login_url="/login/")
 def home(request):
     if request.method == "POST":
@@ -34,7 +38,7 @@ def home(request):
             title=video_title,
             link=data.get('link')
         )
-        return redirect("/")
+        return redirect("/home/")
     subjects = Subject.objects.filter(video__user=request.user).distinct()  # Fetch all subjects with their videos
     context = {'subjects': subjects}
     return render(request, "index.html", context)
@@ -51,7 +55,7 @@ def delete_subject(request, id):
     except Subject.DoesNotExist:
         messages.error(request, "You cannot delete this subject!")
     
-    return redirect('/')
+    return redirect('/home/')
 
 @login_required(login_url="/login/")
 def delete_video(request, video_title):
@@ -68,14 +72,14 @@ def delete_video(request, video_title):
     else:
         messages.error(request, "Video not found or you don't have permission to delete it.")
     
-    return redirect('/')
+    return redirect('/home/')
 
 
 @login_required
 def delete_account(request):
     user = request.user
     user.delete()
-    return redirect('/login/')
+    return redirect('/')
 
 def login_page(request):
     if request.method == "POST":
@@ -92,7 +96,7 @@ def login_page(request):
             return redirect('/login/')
         else:
             login(request,user)
-            return redirect('/')
+            return redirect('/home/')
             
             
     return render(request,'login.html')
@@ -162,13 +166,13 @@ def copy_subject_by_code(request):
                     new_video.save()  
                     print(f"Video saved: {new_video.title}")
                 messages.success(request, "Subject and videos copied successfully!")
-                return redirect('/') 
+                return redirect('/home/') 
             else:
                 messages.error(request, "You cannot copy your own subject!")
-                return redirect('/')
+                return redirect('/home/')
         except Subject.DoesNotExist:
             messages.error(request, "Invalid subject code!")
-            return redirect('/')
+            return redirect('/home/')
 
     return render(request, 'index.html')
 def get_gemini_response(input_text):

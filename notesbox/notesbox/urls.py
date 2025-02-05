@@ -18,8 +18,9 @@ from django.contrib import admin
 from django.urls import path,include
 from videos.views import *
 urlpatterns = [
-    path('admin/', admin.site.urls), 
-    path("",home,name="home"),
+    path('admin/', admin.site.urls),
+    path("", instructions, name="instructions"), 
+    path("home/",home,name="home"),
     path('login/',login_page,name="login_page"),
     path('register/',register,name="register"),
     path('logout/',logout_page,name="logout_page"),
