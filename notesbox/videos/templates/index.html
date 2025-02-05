@@ -1,3 +1,4 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en" style="display: flex;flex-direction: column;">
 <head>
@@ -143,7 +144,7 @@
 </head>
 <body style="display: flex;flex-direction: column;" >
     <header class="navbar bg-dark border-bottom border-body sticky-top" data-bs-theme="dark">
-        <img class="navbar-brand" style="height: 60px; margin-left: 15px;" src="static/LOGO-modified.png" alt="Logo">
+        <img class="navbar-brand" style="height: 60px; margin-left: 15px;" src="{% static 'LOGO-modified.png' %}" alt="Logo">
         <h1 style="font-family: serif; color: aliceblue; margin-right: 15px;"><b>Notesbox</b></h1>
         <div style="margin-right:10px;">
             <h5 style="color:white;">Hii...{{request.user.username}}</h5>
@@ -276,10 +277,10 @@
                             <img src="https://upload.wikimedia.org/wikipedia/commons/a/a5/Instagram_icon.png" alt="Instagram" style="width: 24px; height: 24px;">
                         </a>
                         <a href="https://twitter.com" class="text-white me-2">
-                            <img src="static/twitterlogo.png" alt="Twitter" style="width: 24px; height: 24px;">
+                            <img src="{% static 'twitterlogo.png' %}"  alt="Twitter" style="width: 24px; height: 24px;">
                         </a>
                         <a href="mailto:tacetgaming2703@gmail.com" class="text-white">
-                            <img src="static/emaillogo.png" alt="Email" style="width: 24px; height: 24px;">
+                            <img src="{% static 'emaillogo.png' %}"  alt="Email" style="width: 24px; height: 24px;">
                         </a>
                     </div>
                 </div>
