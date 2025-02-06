@@ -1,39 +1,117 @@
 {% extends 'base.html' %}
 {% block title %}
-    NoteBox 
+    NoteBox - Register
 {% endblock %}
 {% block start %}
-    <div class="container mt-5">
-        <form class="col-6 mx-auto card p-3 shadow-lg" method="post" enctype="multipart/form-data">
-            {% csrf_token %}
-            <h2>New User Register</h2>
-            <hr>
-            {% if messages %}
-<ul class="messages">
-    {% for message in messages %}
-    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
-    {% endfor %}
-</ul>
-{% endif %}
-            <div class="mb-3">
-                <label for="exampleInputPassword1" class="form-label">First Name</label>
-                <input type="text" class="form-control" name="first_name" id="exampleInputPassword1">
-              </div>
-              <div class="mb-3">
-                <label for="exampleInputPassword1" class="form-label">Last Name</label>
-                <input type="text" class="form-control" name="last_name" id="exampleInputPassword1">
-              </div>
-                <div class="mb-3">
-                  <label for="exampleInputEmail1" class="form-label">Username</label>
-                  <input type="text" class="form-control" name="username" id="exampleInputEmail1" aria-describedby="emailHelp">
-                  <div id="emailHelp" class="form-text"></div>
-                </div>
-                <div class="mb-3">
-                  <label for="exampleInputPassword1" class="form-label">Password</label>
-                  <input type="password" class="form-control" name="password" id="exampleInputPassword1">
-                </div>
-                <p>Already have account <a href="/login/">Login</a></p>
-                <button type="submit" class="btn btn-primary">Submit</button>
-          </form>  
+    <style>
+        body {
+            background: linear-gradient(to right, #4facfe, #00f2fe);
+            font-family: 'Poppins', sans-serif;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .card {
+            border-radius: 15px;
+            padding: 30px;
+            max-width: 400px;
+            width: 100%;
+            background: white;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .form-control {
+            border-radius: 10px;
+            padding: 12px;
+            font-size: 16px;
+            border: 1px solid #ddd;
+        }
+
+        .btn-primary {
+            width: 100%;
+            border-radius: 10px;
+            padding: 12px;
+            font-size: 16px;
+            background: #007bff;
+            border: none;
+            transition: all 0.3s ease-in-out;
+        }
+
+        .btn-primary:hover {
+            background: #0056b3;
+            transform: scale(1.05);
+        }
+
+        .messages {
+            padding: 10px;
+            text-align: center;
+        }
+
+        .alert {
+            border-radius: 10px;
+            padding: 10px;
+            font-size: 14px;
+        }
+
+        p {
+            text-align: center;
+            margin-top: 10px;
+        }
+
+        p a {
+            color: #007bff;
+            font-weight: bold;
+            text-decoration: none;
+        }
+
+        p a:hover {
+            text-decoration: underline;
+        }
+    </style>
+
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-6 col-lg-4">
+                <form class="card shadow-lg" method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <h2 class="text-center text-dark">New User Register</h2>
+                    <hr>
+
+                    {% if messages %}
+                        <div class="messages">
+                            {% for message in messages %}
+                                <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+
+                    <div class="mb-3">
+                        <label class="form-label">First Name</label>
+                        <input type="text" class="form-control" name="first_name" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Last Name</label>
+                        <input type="text" class="form-control" name="last_name" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Username</label>
+                        <input type="text" class="form-control" name="username" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Password</label>
+                        <input type="password" class="form-control" name="password" required>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary">Register</button>
+
+                    <p>Already have an account? <a href="/login/">Login</a></p>
+                </form>
+            </div>
+        </div>
     </div>
 {% endblock %}
