@@ -185,7 +185,7 @@ def get_gemini_response(input_text):
     }
 
     model = genai.GenerativeModel(
-        model_name="gemini-2.0-flash-exp",
+        model_name="gemini-2.0-flash",
         generation_config=generation_config,
     )
 
